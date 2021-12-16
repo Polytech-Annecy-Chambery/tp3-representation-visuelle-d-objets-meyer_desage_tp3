@@ -4,6 +4,7 @@ Created on Thu Nov 16 19:47:50 2017
 
 @author: lfoul
 """
+
 import OpenGL.GL as gl
 
 class House:
@@ -41,5 +42,15 @@ class House:
             
     # Draws the house      
     def draw(self):  
-        # A compléter en remplaçant pass par votre code
-        pass        
+        
+        gl.glPushMatrix()
+        
+        gl.glTranslate(self.parameters['position'][0],self.parameters['position'][1],self.parameters['position'][2])   
+        gl.glRotate(self.parameters['orientation'],0,0,1)
+        # for i in range (0, len(self.objects)):
+        #     self.objects[i.draw()
+        for obj in self.objects:
+            obj.draw()
+        gl.glPopMatrix()
+        
+       

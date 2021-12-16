@@ -4,6 +4,7 @@ Created on Thu Nov 16 19:47:50 2017
 
 @author: lfoul
 """
+
 import pygame
 import OpenGL.GL as gl
 import OpenGL.GLU as glu
@@ -74,7 +75,8 @@ class Configuration:
 
         gl.glMatrixMode(gl.GL_MODELVIEW)
         gl.glLoadIdentity()
-        gl.glTranslatef(0.0,0.0, self.parameters['screenPosition'])       
+        gl.glTranslatef(0.0,0.0, self.parameters['screenPosition']) 
+        gl.glRotatef(-90,1,0,0)
         
     # Getter
     def getParameter(self, parameterKey):
@@ -146,14 +148,31 @@ class Configuration:
         elif self.event.dict['unicode'] == 'a' or self.event.key == pygame.K_a:
             self.parameters['axes'] = not self.parameters['axes']
             pygame.time.wait(300)
-    
+            
+        #zoom +/- clavier
+        elif self.event.key == pygame.K_PAGEUP:
+            gl.glScalef(1.1,1.1,1.1)
+        elif self.event.key == pygame.K_PAGEDOWN:
+            gl.glScalef(1/1.1,1/1.1,1/1.1)
+
     # Processes the MOUSEBUTTONDOWN event
     def processMouseButtonDownEvent(self):
-        pass
-    
+        if self.event.button == 4:
+            gl.glScalef(1.1,1.1,1.1)
+        elif self.event.button == 5:
+            gl.glScalef(1/1.1,1/1.1,1/1.1)
+            
     # Processes the MOUSEMOTION event
     def processMouseMotionEvent(self):
-        pass
+        
+        if pygame.mouse.get_pressed()[0] == 1:
+            gl.glRotate(-self.event.rel[0],1,0,0) 
+            gl.glRotate(-self.event.rel[1],0,0,1)
+            
+        if pygame.mouse.get_pressed()[2] == 1:
+            gl.glTranslate(self.event.rel[0]/20,0,0) 
+            gl.glTranslate(0,0,self.event.rel[1]/20)
+            
          
     # Displays on screen and processes events    
     def display(self): 
